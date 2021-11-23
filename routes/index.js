@@ -1,9 +1,10 @@
 const router = require("express").Router();
 const User = require("../models/User.model");
-const bcrypt = require('bcryptjs');
+const bcryptjs = require('bcryptjs');
+const bodyparser = require('body-parser');
 const saltRounds = 10;
 
-const salt = bcrypt.genSaltSync(saltRounds);
+const salt = bcryptjs.genSaltSync(saltRounds);
 
 /* GET home page */
 router.get("/", (req, res, next) => {
@@ -15,8 +16,9 @@ router.get("/registration", (req, res, next) => {
 });
 
 router.post("/registration", (req, res, next) => {
-  const {Username, Password} = req.body; 
-  const hash = bcrypt.hashSync(Password, salt);
+  const { Username, Password } = Object.assign({}, req.body); 
+  const hash = bcryptjs.hashSync(Password, salt);
+
   User.create({
     Username,
     passwordHash: hash
@@ -25,6 +27,14 @@ router.post("/registration", (req, res, next) => {
     res.redirect("/")
   })
   .catch(error => next(error));
+});
+
+router.get("/login", (req, res, next) => {
+  res.render("login")
+});
+
+router.post("login", (req, res, next) => {
+  const { Username, Password } = req.body;
 });
 
 module.exports = router;
