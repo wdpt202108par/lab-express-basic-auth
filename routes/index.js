@@ -20,8 +20,40 @@ router.post('/signup', function(req, res, next) {
   const hashedPassword = bcryptjs.hashSync(password, salt);
 
   User.create({username, password: hashedPassword})
-    .then(userCreated => console.log("user created", userCreated))
+    .then(userCreated => res.render("myProfile", {
+      username: userCreated.username} ))
     .catch(err => next(err))
+})
+
+router.get("/login", function(req, res, next) {
+  res.render("auth/login", {})
+})
+
+router.post("/login", function(req, res, next) {
+  const {username, password} = req.body
+  //validation
+  if(!username || !password) { //=> empty
+    res.render("auth/login", {
+      errMessage: "Username or password should not be empty"
+    })
+    return;
+  }
+  //query db
+  User.findOne({username: username})
+    .then(function(userFromDb) {
+      if(!userFromDb) {
+        res.render("auth/login", {errMessage: "user not registered"})
+        return;
+      } else if (bcryptjs.compareSync(password, userFromDb.password)) {
+        res.render("myProfile", {username: userFromDb.username});
+      } else {
+        res.render("auth/login", {errMessage: "invalid username/password"});
+      }
+    })
+    .catch(err => console.log(err))
+    //check if username and password are valid
+    // render vers la page profile
+
 })
 
 module.exports = router;
