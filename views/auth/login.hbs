@@ -6,13 +6,14 @@
 {{/if}}
 
 <form action="/login" method="POST">
+    {{!-- BONUS : frontend validation --}}
     <label>
         Username:
-        <input type="text" name="username">
+        <input type="text" name="username" required>
     </label>
     <label>
         Password:
-        <input type="password" name="password">
+        <input type="password" name="password" required>
     </label>
     <button>Log me IN!</button>
 </form>
