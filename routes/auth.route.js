@@ -13,11 +13,16 @@ router.post('/signup', (req, res, next) => {
         username: req.body.username,
         passwordHash: encryptedPassword
     })
-        .then(function (req, res, next) {
+        .then(userFromDB =>{
             res.send('Utilisateur créé')
-            //res.redirect('/profile')
+            console.log('Newly created user is:', userFromDB);
+            res.redirect('/user-profile');
         })
         .catch(err => next(err))
+})
+
+router.get('/user-profile', (req, res, next)=>{
+    res.render('user-profile');
 })
 
 module.exports = router;
