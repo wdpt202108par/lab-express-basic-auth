@@ -30,6 +30,10 @@ router.post('/signup', (req, res, next)=>{
     .catch(error => console.log(error))
 
 })
+
+router.get('/userProfile', (req, res, next)=>{
+    res.render('/users/user-profile');
+})
     
 
 
