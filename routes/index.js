@@ -30,7 +30,6 @@ router.get("/login", function(req, res, next) {
 })
 
 router.post("/login", function(req, res, next) {
-  console.log('SESSION:', req.session);
   const {username, password} = req.body
   //validation
   if(!username || !password) { //=> empty
@@ -46,7 +45,9 @@ router.post("/login", function(req, res, next) {
         res.render("auth/login", {errMessage: "user not registered"})
         return;
       } else if (bcryptjs.compareSync(password, userFromDb.password)) {
-        res.render("/myProfile", {username: userFromDb.username});
+        console.log('SESSION:', req.session);
+        req.session.user = userFromDb.username;
+        res.render("myProfile", {username: userFromDb.username});
       } else {
         res.render("auth/login", {errMessage: "invalid username/password"});
       }
@@ -55,6 +56,25 @@ router.post("/login", function(req, res, next) {
     //check if username and password are valid
     // render vers la page profile
 
+})
+
+router.get("/main", function(req,res,next) {
+  if(!req.session.user){
+    res.render("auth/login", {errMessage: "login to view this page"})
+  }
+  res.render("main");
+})
+
+router.get("/private", function(req,res,next) {
+  if(!req.session.user){
+    res.render("auth/login", {errMessage: "login to view this page"})
+  }
+  res.render("private");
+})
+
+router.get("/logout", function(req, res, next) {
+  req.session.destroy()
+  res.render("auth/login", {})
 })
 
 // router.get("/myprofile/:name", function(req, res, next) {
