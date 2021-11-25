@@ -37,6 +37,7 @@ router.get('/login', (req, res, next) => {
 
 router.post('/login', (req, res, next) => {
   console.log('SESSION =====> ', req.session);
+
   const { email, password } = req.body;
   if (email === '' || password === '') {
     res.render('auth/login', {
@@ -50,6 +51,7 @@ router.post('/login', (req, res, next) => {
         res.render('auth/login', { errorMessage: 'Email is not registered. Try with other email.' });
         return;
       } else if (bcryptjs.compareSync(password, user.password)) {
+        // req.session.currentUser = user
         res.render('users/user-profile', { user });
       } else {
         res.render('auth/login', { errorMessage: 'Incorrect password.' });
@@ -57,5 +59,11 @@ router.post('/login', (req, res, next) => {
     })
     .catch(error => next(error));
 });
+
+router.get('/profile', function (req, res, next) {
+  if (!req.session.currentUser) return res.redirect('/login')
+
+  res.send('Bienvenue '+ req.session.currentUser.username)
+})
 
 module.exports = router;
