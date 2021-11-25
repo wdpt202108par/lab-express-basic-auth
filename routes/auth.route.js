@@ -14,7 +14,7 @@ router.post('/signup', (req, res, next) => {
         passwordHash: encryptedPassword
     })
         .then(userFromDB =>{
-            res.send('Utilisateur créé')
+            res.send('Utilisateur créé' , {myUser : userfromDB})
             console.log('Newly created user is:', userFromDB);
             res.redirect('/user-profile');
         })
@@ -24,5 +24,13 @@ router.post('/signup', (req, res, next) => {
 router.get('/user-profile', (req, res, next)=>{
     res.render('user-profile');
 })
+
+// iteration 2 - step 2
+
+router.get('/login', (req, res, next) => {
+    res.render('auth-login');
+})
+
+
 
 module.exports = router;
