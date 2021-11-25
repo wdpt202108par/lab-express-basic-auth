@@ -7,12 +7,12 @@ const userSchema = new Schema({
     unique: true,
     required: [true, 'Username is required'],
   },
-  password: {
+  passwordHash: {
     type: String,
     required: [true, 'Password is required.']
   }
 });
 
-const User = model("User", userSchema);
+module.exports = model("User", userSchema);
 
-module.exports = User;
+
