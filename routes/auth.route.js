@@ -21,8 +21,8 @@ router.post('/signup', (req, res, next) => {
         .catch(err => next(err))
 })
 
-router.get('/user-profile', (req, res, next)=>{
-    res.render('user-profile');
+router.get('/user-profile', (req, res)=>{
+    res.render('user-profile' ,{userInSession :req.session.currentUser});
 })
 
 // iteration 2 - step 2
@@ -35,6 +35,9 @@ router.get('/login', (req, res, next) => {
 //.post() login route ==> to process from data
 router.post('/login', (req, res, next) =>{
     const {username, password} = req.body;
+
+    // to see the req.session
+    console.log('SESSION =====> ', req.session);
 
     if (username === '' || password === ''){
         res.render('auth-login', {
@@ -49,7 +52,9 @@ User.findOne({username})
         res.render('auth-login', {errorMessage: 'Username is not valid, please try with other username'});
         return ;
     }else if (bcryptjs.compareSync(password, user.passwordHash)){
-        res.render('user-profile', {user});
+        //******* SAVE THE USER IN THE SESSION ********//
+        req.session.currentUser = user;
+        res.redirect('/user-profile');
     }else {
         res.render('auth-login', {errorMessage: 'Incorrect password! try again'});
     }
