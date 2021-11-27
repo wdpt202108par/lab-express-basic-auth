@@ -6,7 +6,19 @@ const userSchema = new Schema({
     type: String,
     unique: true
   },
-  password: String
+  
+  password:{
+  type: String,
+  required: [true, 'Password is required.']
+  },
+  email: {
+    type: String,
+    required: [true, 'Email is required.'],
+    unique: true,
+    lowercase: true,
+    trim: true
+  },
+ 
 });
 
 const User = model("User", userSchema);
