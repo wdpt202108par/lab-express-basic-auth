@@ -1,0 +1,18 @@
+<h2>Sign up page here</h2>
+
+{{#if errMessage}}
+    <h2>{{errMessage}}</h2>
+{{/if}}
+
+<form action="/signup" method="POST">
+    {{!-- BONUS : frontend validation --}}
+    <label>
+        Username:
+        <input type="text" name="username" required>
+    </label>
+    <label>
+        Password:
+        <input type="password" name="password" required>
+    </label>
+    <button>Sign Up!</button>
+</form>
